@@ -2,13 +2,30 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 
-export default function Topbar() {
+interface TopbarProps {
+  onMenuToggle: () => void;
+}
+
+export default function Topbar({ onMenuToggle }: TopbarProps) {
   const { user } = useAuth();
 
   return (
     <header className="topbar">
-      <div style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--color-text-main)" }}>
-        Panel de Administración
+      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+        <button
+          className="sidebar-mobile-toggle"
+          onClick={onMenuToggle}
+          aria-label="Toggle menu"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--color-text-main)" }}>
+          Panel de Administración
+        </div>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
         {user && (

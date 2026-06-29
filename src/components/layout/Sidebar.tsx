@@ -17,40 +17,49 @@ const allLinks: { href: string; label: string; roles: Rol[] }[] = [
   { href: "/historial", label: "Historial de notificaciones", roles: ["ADMINISTRADOR", "SUPER_ADMIN"] },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  mobileOpen: boolean;
+  onClose: () => void;
+}
+
+export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
   const visibleLinks = allLinks.filter((l) => user && l.roles.includes(user.rol));
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-logo">
-        <div className="sidebar-logo-icon">AT</div>
-        Admin Tools
-      </div>
-      <nav className="sidebar-nav">
-        {visibleLinks.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={`sidebar-link ${pathname === link.href ? "active" : ""}`}
-          >
-            {link.label}
-          </Link>
-        ))}
-      </nav>
-      <div className="sidebar-footer">
-        {user && (
-          <div className="sidebar-user">
-            <span className="sidebar-username">{user.nombre}</span>
-            <span className="sidebar-role">{user.rol}</span>
-          </div>
-        )}
-        <button className="sidebar-logout" onClick={logout}>
-          Cerrar sesión
-        </button>
-      </div>
-    </aside>
+    <>
+      {mobileOpen && <div className="sidebar-overlay" onClick={onClose} />}
+      <aside className={`sidebar ${mobileOpen ? "sidebar-open" : ""}`}>
+        <div className="sidebar-logo">
+          <div className="sidebar-logo-icon">AT</div>
+          Admin Tools
+        </div>
+        <nav className="sidebar-nav">
+          {visibleLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`sidebar-link ${pathname === link.href ? "active" : ""}`}
+              onClick={onClose}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="sidebar-footer">
+          {user && (
+            <div className="sidebar-user">
+              <span className="sidebar-username">{user.nombre}</span>
+              <span className="sidebar-role">{user.rol}</span>
+            </div>
+          )}
+          <button className="sidebar-logout" onClick={logout}>
+            Cerrar sesión
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }
