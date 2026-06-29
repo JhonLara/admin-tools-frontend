@@ -147,6 +147,7 @@ export const api = {
     crear: (data: { cedulaCliente: string; aliadoId: string }) => fetchJson<Solicitud>("/solicitudes", { method: "POST", body: JSON.stringify(data) }),
     finalizar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/finalizar`, { method: "PATCH" }),
     notificarObservacion: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/notificar-observacion`, { method: "POST" }),
+    validar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/validar`, { method: "PATCH" }),
     rechazar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/rechazar`, { method: "PATCH" }),
     aprobar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/aprobar`, { method: "PATCH" }),
   },

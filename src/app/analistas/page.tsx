@@ -95,6 +95,25 @@ export default function AnalistasPage() {
     });
   };
 
+  const validar = (id: string) => {
+    setConfirm({
+      open: true,
+      title: "Validar solicitud",
+      message: "¿Estás seguro de que deseas validar esta solicitud? Se enviará la notificación al grupo del aliado.",
+      variant: "success",
+      onConfirm: async () => {
+        setConfirm((c) => ({ ...c, open: false }));
+        try {
+          await api.solicitudes.validar(id);
+          setToast({ message: "Solicitud validada y notificada", type: "success" });
+          cargar();
+        } catch (e: any) {
+          setToast({ message: e.message, type: "error" });
+        }
+      },
+    });
+  };
+
   const aprobar = (id: string) => {
     setConfirm({
       open: true,
@@ -132,6 +151,7 @@ export default function AnalistasPage() {
                 { value: "NOTIFICADA", label: "Notificada" },
                 { value: "EN_PROCESO", label: "En proceso" },
                 { value: "RECHAZADA", label: "Rechazada" },
+                { value: "VALIDADA", label: "Validada" },
                 { value: "APROBADA", label: "Aprobada" },
                 { value: "FINALIZADA", label: "Finalizada" },
                 { value: "ERROR_NOTIFICACION", label: "Error notificación" },
@@ -177,6 +197,8 @@ export default function AnalistasPage() {
                       ? "notificada"
                       : s.estado === "RECHAZADA"
                       ? "error"
+                      : s.estado === "VALIDADA"
+                      ? "notificada"
                       : s.estado === "APROBADA"
                       ? "success"
                       : s.estado === "FINALIZADA"
@@ -197,6 +219,9 @@ export default function AnalistasPage() {
                 <div className="flex gap-1 flex-wrap">
                   <Button size="sm" variant="info" onClick={() => notificar(s.id)}>
                     Notificar
+                  </Button>
+                  <Button size="sm" variant="warning" onClick={() => validar(s.id)}>
+                    Validar
                   </Button>
                   <Button size="sm" variant="danger" onClick={() => rechazar(s.id)}>
                     Rechazar

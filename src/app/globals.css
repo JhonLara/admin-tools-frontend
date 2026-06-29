@@ -292,6 +292,15 @@ html, body {
   background: #0284C7;
 }
 
+.btn-warning {
+  background: var(--color-warning);
+  color: #fff;
+}
+
+.btn-warning:hover:not(:disabled) {
+  background: #D97706;
+}
+
 .btn-sm {
   padding: 0.4rem 0.8rem;
   font-size: 0.8rem;
