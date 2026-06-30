@@ -19,6 +19,7 @@ export default function AliadosPage() {
   const [editing, setEditing] = useState<Aliado | null>(null);
   const [nombre, setNombre] = useState("");
   const [empresaId, setEmpresaId] = useState("");
+  const [empresaIds, setEmpresaIds] = useState<string[]>([]);
   const [telegramChatId, setTelegramChatId] = useState("");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
@@ -43,6 +44,7 @@ export default function AliadosPage() {
     setEditing(null);
     setNombre("");
     setEmpresaId("");
+    setEmpresaIds([]);
     setTelegramChatId("");
     setModalOpen(true);
   };
@@ -51,6 +53,7 @@ export default function AliadosPage() {
     setEditing(a);
     setNombre(a.nombre);
     setEmpresaId(a.empresa.id);
+    setEmpresaIds(a.empresas.map((e) => e.id));
     setTelegramChatId(a.telegramChatId || "");
     setModalOpen(true);
   };
@@ -58,9 +61,9 @@ export default function AliadosPage() {
   const guardar = async () => {
     try {
       if (editing) {
-        await api.aliados.actualizar(editing.id, { nombre, empresaId, telegramChatId });
+        await api.aliados.actualizar(editing.id, { nombre, empresaIds: empresaId ? [empresaId] : empresaIds, telegramChatId });
       } else {
-        await api.aliados.crear({ nombre, empresaId, telegramChatId });
+        await api.aliados.crear({ nombre, empresaIds: empresaId ? [empresaId] : [], telegramChatId });
       }
       setModalOpen(false);
       setToast({ message: editing ? "Aliado actualizado" : "Aliado creado", type: "success" });

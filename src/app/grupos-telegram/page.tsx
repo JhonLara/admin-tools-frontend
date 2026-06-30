@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api, Aliado, Empresa } from "@/lib/api";
+import { api, Aliado, Empresa, AliadoEmpresaTelegram } from "@/lib/api";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
 import Table from "@/components/ui/Table";
@@ -9,12 +9,19 @@ import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import Toast from "@/components/ui/Toast";
 
+interface Combinacion {
+  aliado: Aliado;
+  empresa: Empresa;
+  chatId: string;
+}
+
 export default function GruposTelegramPage() {
   const [aliados, setAliados] = useState<Aliado[]>([]);
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
+  const [combinaciones, setCombinaciones] = useState<Combinacion[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editing, setEditing] = useState<Aliado | null>(null);
+  const [editing, setEditing] = useState<Combinacion | null>(null);
   const [chatId, setChatId] = useState("");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
@@ -24,6 +31,20 @@ export default function GruposTelegramPage() {
       const [ali, emp] = await Promise.all([api.aliados.listar(), api.empresas.listar()]);
       setAliados(ali);
       setEmpresas(emp);
+
+      // Generar todas las combinaciones aliado x empresa
+      const combos: Combinacion[] = [];
+      for (const a of ali) {
+        for (const e of emp.filter((x) => x.estado === "ACTIVA")) {
+          try {
+            const config = await api.aliadoEmpresaTelegram.obtener(a.id, e.id);
+            combos.push({ aliado: a, empresa: e, chatId: config.telegramChatId || "" });
+          } catch {
+            combos.push({ aliado: a, empresa: e, chatId: "" });
+          }
+        }
+      }
+      setCombinaciones(combos);
     } catch (e: any) {
       setToast({ message: e.message, type: "error" });
     } finally {
@@ -35,17 +56,17 @@ export default function GruposTelegramPage() {
     cargar();
   }, []);
 
-  const abrirEditar = (a: Aliado) => {
-    setEditing(a);
-    setChatId(a.telegramChatId || "");
+  const abrirEditar = (c: Combinacion) => {
+    setEditing(c);
+    setChatId(c.chatId);
     setModalOpen(true);
   };
 
   const guardar = async () => {
     if (!editing) return;
     try {
-      await api.aliados.actualizar(editing.id, {
-        nombre: editing.nombre,
+      await api.aliadoEmpresaTelegram.guardar({
+        aliadoId: editing.aliado.id,
         empresaId: editing.empresa.id,
         telegramChatId: chatId,
       });
@@ -57,12 +78,7 @@ export default function GruposTelegramPage() {
     }
   };
 
-  const nombreEmpresa = (empresaId: string) => {
-    const e = empresas.find((e) => e.id === empresaId);
-    return e ? e.nombre : empresaId;
-  };
-
-  if (loading) return <div className="loading-state">Cargando aliados...</div>;
+  if (loading) return <div className="loading-state">Cargando configuraciones...</div>;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
@@ -71,47 +87,47 @@ export default function GruposTelegramPage() {
           Grupos de Telegram
         </h1>
         <span style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)" }}>
-          {aliados.length} aliados registrados
+          {combinaciones.length} combinaciones
         </span>
       </div>
 
       <Card>
         <Table
           columns={[
-            { header: "Aliado", accessor: (a) => a.nombre },
-            { header: "Empresa", accessor: (a) => nombreEmpresa(a.empresa.id) },
+            { header: "Aliado", accessor: (c) => c.aliado.nombre },
+            { header: "Empresa", accessor: (c) => c.empresa.nombre },
             {
               header: "Grupo Telegram",
-              accessor: (a) => (
+              accessor: (c) => (
                 <span
                   style={{
                     fontFamily: "monospace",
                     fontSize: "0.85rem",
-                    color: a.telegramChatId ? "var(--color-primary)" : "var(--color-text-secondary)",
-                    fontWeight: a.telegramChatId ? 600 : 400,
+                    color: c.chatId ? "var(--color-primary)" : "var(--color-text-secondary)",
+                    fontWeight: c.chatId ? 600 : 400,
                   }}
                 >
-                  {a.telegramChatId || "No configurado"}
+                  {c.chatId || "No configurado"}
                 </span>
               ),
             },
             {
               header: "Acciones",
-              accessor: (a) => (
-                <Button size="sm" variant="secondary" onClick={() => abrirEditar(a)}>
+              accessor: (c) => (
+                <Button size="sm" variant="secondary" onClick={() => abrirEditar(c)}>
                   Configurar
                 </Button>
               ),
             },
           ]}
-          data={aliados}
-          keyExtractor={(a) => a.id}
+          data={combinaciones}
+          keyExtractor={(c) => `${c.aliado.id}-${c.empresa.id}`}
         />
       </Card>
 
       <Modal
         open={modalOpen}
-        title={`Configurar grupo - ${editing?.nombre}`}
+        title={`Configurar grupo - ${editing?.aliado.nombre} / ${editing?.empresa.nombre}`}
         onClose={() => setModalOpen(false)}
         footer={
           <>
@@ -141,7 +157,7 @@ export default function GruposTelegramPage() {
               placeholder="Ej: -5430015388"
             />
             <p style={{ fontSize: "0.75rem", color: "var(--color-text-secondary)", marginTop: "0.35rem" }}>
-              Usa el ID numérico del grupo de Telegram. Si está vacío, se usará el grupo por defecto.
+              Usa el ID numérico del grupo de Telegram. Si está vacío, se usará el grupo por defecto del aliado.
             </p>
           </div>
         </div>

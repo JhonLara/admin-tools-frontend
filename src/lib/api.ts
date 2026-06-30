@@ -36,6 +36,7 @@ export interface Aliado {
   id: string;
   nombre: string;
   empresa: { id: string; nombre: string };
+  empresas: { id: string; nombre: string }[];
   telegramChatId: string;
   estado: string;
 }
@@ -53,6 +54,7 @@ export interface Solicitud {
   id: string;
   cedulaCliente: string;
   aliado: { id: string; nombre: string };
+  empresa: { id: string; nombre: string };
   analista: { id: string; nombre: string; cedula: string } | null;
   estado: string;
   fechaCreacion: string;
@@ -115,6 +117,13 @@ export interface DashboardResumen {
   ultimasSolicitudes: Solicitud[];
 }
 
+export interface AliadoEmpresaTelegram {
+  id: string;
+  aliadoId: string;
+  empresaId: string;
+  telegramChatId: string;
+}
+
 export const api = {
   auth: {
     login: (data: { username: string; password: string }) => fetchJson<Usuario>("/auth/login", { method: "POST", body: JSON.stringify(data) }),
@@ -129,8 +138,8 @@ export const api = {
   aliados: {
     listar: () => fetchJson<Aliado[]>("/aliados"),
     listarActivos: () => fetchJson<Aliado[]>("/aliados/activos"),
-    crear: (data: { nombre: string; empresaId: string; telegramChatId?: string }) => fetchJson<Aliado>("/aliados", { method: "POST", body: JSON.stringify(data) }),
-    actualizar: (id: string, data: { nombre: string; empresaId: string; telegramChatId?: string }) => fetchJson<Aliado>(`/aliados/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+    crear: (data: { nombre: string; empresaIds: string[]; telegramChatId?: string }) => fetchJson<Aliado>("/aliados", { method: "POST", body: JSON.stringify(data) }),
+    actualizar: (id: string, data: { nombre: string; empresaIds: string[]; telegramChatId?: string }) => fetchJson<Aliado>(`/aliados/${id}`, { method: "PUT", body: JSON.stringify(data) }),
     cambiarEstado: (id: string) => fetchJson<Aliado>(`/aliados/${id}/estado`, { method: "PATCH" }),
   },
   analistas: {
@@ -144,12 +153,15 @@ export const api = {
     listar: () => fetchJson<Solicitud[]>("/solicitudes"),
     listarPorAnalista: (analistaId: string) => fetchJson<Solicitud[]>(`/solicitudes/mis-solicitudes?analistaId=${analistaId}`),
     obtener: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}`),
-    crear: (data: { cedulaCliente: string; aliadoId: string }) => fetchJson<Solicitud>("/solicitudes", { method: "POST", body: JSON.stringify(data) }),
+    crear: (data: { cedulaCliente: string; aliadoId: string; empresaId: string }) => fetchJson<Solicitud>("/solicitudes", { method: "POST", body: JSON.stringify(data) }),
+    listarPorVendedor: () => fetchJson<Solicitud[]>("/solicitudes/mis-solicitudes-vendedor"),
     finalizar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/finalizar`, { method: "PATCH" }),
     notificarObservacion: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/notificar-observacion`, { method: "POST" }),
     validar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/validar`, { method: "PATCH" }),
     rechazar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/rechazar`, { method: "PATCH" }),
     aprobar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/aprobar`, { method: "PATCH" }),
+    firmaRecibida: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/firma-recibida`, { method: "PATCH" }),
+    eliminar: (id: string) => fetchJson<void>(`/solicitudes/${id}`, { method: "DELETE" }),
   },
   historial: {
     listar: () => fetchJson<HistorialNotificacion[]>("/historial-notificaciones"),
@@ -169,5 +181,9 @@ export const api = {
     crear: (data: { username: string; password: string; nombre: string; rol: string; analistaId?: string }) => fetchJson<Usuario>("/usuarios", { method: "POST", body: JSON.stringify(data) }),
     actualizar: (id: string, data: { username: string; password?: string; nombre: string; rol: string; analistaId?: string }) => fetchJson<Usuario>(`/usuarios/${id}`, { method: "PUT", body: JSON.stringify(data) }),
     cambiarEstado: (id: string) => fetchJson<Usuario>(`/usuarios/${id}/estado`, { method: "PATCH" }),
+  },
+  aliadoEmpresaTelegram: {
+    obtener: (aliadoId: string, empresaId: string) => fetchJson<AliadoEmpresaTelegram>(`/aliado-empresa-telegram?aliadoId=${aliadoId}&empresaId=${empresaId}`),
+    guardar: (data: { aliadoId: string; empresaId: string; telegramChatId: string }) => fetchJson<AliadoEmpresaTelegram>("/aliado-empresa-telegram", { method: "POST", body: JSON.stringify(data) }),
   },
 };

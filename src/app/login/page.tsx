@@ -28,6 +28,7 @@ export default function LoginPage() {
         username: res.username,
         nombre: res.nombre,
         rol: userRol,
+        analistaId: res.analistaId,
       });
 
       if (userRol === "VENDEDOR") {
@@ -52,9 +53,11 @@ export default function LoginPage() {
         alignItems: "center",
         justifyContent: "center",
         background: "var(--color-bg)",
+        padding: "1.5rem 0",
+        overflow: "auto",
       }}
     >
-      <div style={{ width: "100%", maxWidth: "460px", padding: "0 1.5rem" }}>
+      <div style={{ width: "100%", maxWidth: "460px", padding: "0 1rem" }}>
         <Card>
           <div
             style={{
@@ -67,33 +70,33 @@ export default function LoginPage() {
           >
             <div
               style={{
-                width: "64px",
-                height: "64px",
-                borderRadius: "16px",
+                width: "56px",
+                height: "56px",
+                borderRadius: "14px",
                 background: "var(--color-primary)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 color: "#fff",
-                fontSize: "1.5rem",
+                fontSize: "1.25rem",
                 fontWeight: 700,
-                marginBottom: "1.25rem",
+                marginBottom: "1rem",
               }}
             >
               AT
             </div>
             <h1
               style={{
-                fontSize: "1.75rem",
+                fontSize: "1.5rem",
                 fontWeight: 800,
                 color: "var(--color-text-main)",
-                marginBottom: "0.4rem",
+                marginBottom: "0.3rem",
                 letterSpacing: "-0.02em",
               }}
             >
               Admin Tools
             </h1>
-            <p style={{ fontSize: "1rem", color: "var(--color-text-secondary)", margin: 0 }}>
+            <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)", margin: 0 }}>
               Inicia sesión para continuar
             </p>
           </div>

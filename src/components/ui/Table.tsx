@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 interface Column<T> {
   header: string;
   accessor: (row: T) => ReactNode;
+  width?: string;
 }
 
 interface TableProps<T> {
@@ -22,7 +23,7 @@ export default function Table<T>({ columns, data, keyExtractor }: TableProps<T>)
         <thead>
           <tr>
             {columns.map((col, i) => (
-              <th key={i}>{col.header}</th>
+              <th key={i} style={col.width ? { width: col.width } : undefined}>{col.header}</th>
             ))}
           </tr>
         </thead>

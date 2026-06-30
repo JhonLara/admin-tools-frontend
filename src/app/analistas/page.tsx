@@ -133,6 +133,25 @@ export default function AnalistasPage() {
     });
   };
 
+  const eliminarSolicitud = (id: string) => {
+    setConfirm({
+      open: true,
+      title: "Eliminar solicitud",
+      message: "¿Estás seguro de que deseas eliminar esta solicitud? Esta acción no se puede deshacer.",
+      variant: "danger",
+      onConfirm: async () => {
+        setConfirm((c) => ({ ...c, open: false }));
+        try {
+          await api.solicitudes.eliminar(id);
+          setToast({ message: "Solicitud eliminada", type: "success" });
+          cargar();
+        } catch (e: any) {
+          setToast({ message: e.message, type: "error" });
+        }
+      },
+    });
+  };
+
   if (loading) return <div className="loading-state">Cargando solicitudes...</div>;
 
   return (
@@ -216,7 +235,7 @@ export default function AnalistasPage() {
             {
               header: "Acciones",
               accessor: (s) => (
-                <div className="flex gap-1 flex-wrap">
+                <div className="flex action-group" style={{ flexWrap: "wrap", alignItems: "center", minHeight: 28 }}>
                   <Button size="sm" variant="info" onClick={() => notificar(s.id)}>
                     Notificar
                   </Button>
@@ -229,6 +248,11 @@ export default function AnalistasPage() {
                   <Button size="sm" variant="success" onClick={() => aprobar(s.id)}>
                     Aprobar
                   </Button>
+                  {esSuperAdmin && (
+                    <Button size="sm" variant="danger" onClick={() => eliminarSolicitud(s.id)}>
+                      Eliminar
+                    </Button>
+                  )}
                 </div>
               ),
             },
