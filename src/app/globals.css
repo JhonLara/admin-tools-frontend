@@ -552,6 +552,11 @@ html, body {
 
   .sidebar {
     display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
     transform: translateX(-100%);
     transition: transform 0.25s ease;
     width: 280px;

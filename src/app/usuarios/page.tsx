@@ -11,6 +11,7 @@ import Modal from "@/components/ui/Modal";
 import Badge from "@/components/ui/Badge";
 import Toast from "@/components/ui/Toast";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 const ROLES = [
   { value: "VENDEDOR", label: "Vendedor" },
@@ -31,6 +32,7 @@ export default function UsuariosPage() {
   const [rol, setRol] = useState("");
   const [analistaId, setAnalistaId] = useState("");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [confirm, setConfirm] = useState<{ open: boolean; id: string; nombre: string }>({ open: false, id: "", nombre: "" });
 
   const cargar = async () => {
     setLoading(true);
@@ -143,6 +145,9 @@ export default function UsuariosPage() {
                   <Button size="sm" variant="secondary" onClick={() => cambiarEstado(u.id)}>
                     {u.estado === "ACTIVO" ? "Desactivar" : "Activar"}
                   </Button>
+                  <Button size="sm" variant="danger" onClick={() => setConfirm({ open: true, id: u.id, nombre: u.nombre })}>
+                    Eliminar
+                  </Button>
                 </div>
               ),
             },
@@ -208,6 +213,26 @@ export default function UsuariosPage() {
           <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
         </div>
       )}
+
+      <ConfirmModal
+        open={confirm.open}
+        title="Eliminar usuario"
+        message={`¿Estás seguro de que deseas eliminar el usuario ${confirm.nombre}?`}
+        variant="danger"
+        confirmLabel="Eliminar"
+        cancelLabel="Cancelar"
+        onConfirm={async () => {
+          setConfirm((c) => ({ ...c, open: false }));
+          try {
+            await api.usuarios.eliminar(confirm.id);
+            setToast({ message: "Usuario eliminado", type: "success" });
+            cargar();
+          } catch (e: any) {
+            setToast({ message: e.message, type: "error" });
+          }
+        }}
+        onCancel={() => setConfirm((c) => ({ ...c, open: false }))}
+      />
     </div>
   );
 }

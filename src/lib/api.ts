@@ -127,6 +127,14 @@ export interface Usuario {
   fechaActualizacion: string;
 }
 
+export interface SesionResumen {
+  username: string;
+  nombre: string;
+  rol: string;
+  totalSesiones: number;
+  sesionesActivas: number;
+}
+
 export interface DashboardResumen {
   totalSolicitudes: number;
   solicitudesPendientes: number;
@@ -166,6 +174,7 @@ export const api = {
     crear: (data: { nombre: string }) => fetchJson<Empresa>("/empresas", { method: "POST", body: JSON.stringify(data) }),
     actualizar: (id: string, data: { nombre: string }) => fetchJson<Empresa>(`/empresas/${id}`, { method: "PUT", body: JSON.stringify(data) }),
     cambiarEstado: (id: string) => fetchJson<Empresa>(`/empresas/${id}/estado`, { method: "PATCH" }),
+    eliminar: (id: string) => fetchVoid(`/empresas/${id}`, { method: "DELETE" }),
   },
   aliados: {
     listar: () => fetchJson<Aliado[]>("/aliados"),
@@ -173,6 +182,7 @@ export const api = {
     crear: (data: { nombre: string; empresaIds: string[]; telegramChatId?: string }) => fetchJson<Aliado>("/aliados", { method: "POST", body: JSON.stringify(data) }),
     actualizar: (id: string, data: { nombre: string; empresaIds: string[]; telegramChatId?: string }) => fetchJson<Aliado>(`/aliados/${id}`, { method: "PUT", body: JSON.stringify(data) }),
     cambiarEstado: (id: string) => fetchJson<Aliado>(`/aliados/${id}/estado`, { method: "PATCH" }),
+    eliminar: (id: string) => fetchVoid(`/aliados/${id}`, { method: "DELETE" }),
   },
   analistas: {
     listar: () => fetchJson<Analista[]>("/analistas"),
@@ -180,6 +190,7 @@ export const api = {
     crear: (data: { nombre: string; cedula: string; ordenAsignacion: number }) => fetchJson<Analista>("/analistas", { method: "POST", body: JSON.stringify(data) }),
     actualizar: (id: string, data: { nombre: string; cedula: string; ordenAsignacion: number }) => fetchJson<Analista>(`/analistas/${id}`, { method: "PUT", body: JSON.stringify(data) }),
     cambiarEstado: (id: string) => fetchJson<Analista>(`/analistas/${id}/estado`, { method: "PATCH" }),
+    eliminar: (id: string) => fetchVoid(`/analistas/${id}`, { method: "DELETE" }),
   },
   solicitudes: {
     listar: () => fetchJson<Solicitud[]>("/solicitudes"),
@@ -213,10 +224,12 @@ export const api = {
     crear: (data: { username: string; password: string; nombre: string; rol: string; analistaId?: string }) => fetchJson<Usuario>("/usuarios", { method: "POST", body: JSON.stringify(data) }),
     actualizar: (id: string, data: { username: string; password?: string; nombre: string; rol: string; analistaId?: string }) => fetchJson<Usuario>(`/usuarios/${id}`, { method: "PUT", body: JSON.stringify(data) }),
     cambiarEstado: (id: string) => fetchJson<Usuario>(`/usuarios/${id}/estado`, { method: "PATCH" }),
+    eliminar: (id: string) => fetchVoid(`/usuarios/${id}`, { method: "DELETE" }),
   },
   sesiones: {
     listar: () => fetchJson<SesionActiva[]>("/sesiones"),
-    conteo: () => fetchJson<{ activas: number }>("/sesiones/conteo"),
+    conteo: () => fetchJson<{ activas: number; total: number }>("/sesiones/conteo"),
+    resumen: () => fetchJson<SesionResumen[]>("/sesiones/resumen"),
     invalidar: (id: string) => fetchVoid(`/sesiones/${id}`, { method: "DELETE" }),
   },
   aliadoEmpresaTelegram: {

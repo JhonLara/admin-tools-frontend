@@ -10,6 +10,7 @@ import Modal from "@/components/ui/Modal";
 import Badge from "@/components/ui/Badge";
 import Toast from "@/components/ui/Toast";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 export default function EmpresasPage() {
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
@@ -18,6 +19,7 @@ export default function EmpresasPage() {
   const [editing, setEditing] = useState<Empresa | null>(null);
   const [nombre, setNombre] = useState("");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [confirm, setConfirm] = useState<{ open: boolean; id: string; nombre: string }>({ open: false, id: "", nombre: "" });
 
   const cargar = async () => {
     setLoading(true);
@@ -101,6 +103,9 @@ export default function EmpresasPage() {
                   <Button size="sm" variant="secondary" onClick={() => cambiarEstado(e.id)}>
                     Cambiar estado
                   </Button>
+                  <Button size="sm" variant="danger" onClick={() => setConfirm({ open: true, id: e.id, nombre: e.nombre })}>
+                    Eliminar
+                  </Button>
                 </div>
               ),
             },
@@ -136,6 +141,26 @@ export default function EmpresasPage() {
           <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
         </div>
       )}
+
+      <ConfirmModal
+        open={confirm.open}
+        title="Eliminar empresa"
+        message={`¿Estás seguro de que deseas eliminar la empresa ${confirm.nombre}?`}
+        variant="danger"
+        confirmLabel="Eliminar"
+        cancelLabel="Cancelar"
+        onConfirm={async () => {
+          setConfirm((c) => ({ ...c, open: false }));
+          try {
+            await api.empresas.eliminar(confirm.id);
+            setToast({ message: "Empresa eliminada", type: "success" });
+            cargar();
+          } catch (e: any) {
+            setToast({ message: e.message, type: "error" });
+          }
+        }}
+        onCancel={() => setConfirm((c) => ({ ...c, open: false }))}
+      />
     </div>
   );
 }

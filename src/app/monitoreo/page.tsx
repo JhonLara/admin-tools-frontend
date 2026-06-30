@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api, SesionActiva } from "@/lib/api";
+import { api, SesionActiva, SesionResumen } from "@/lib/api";
 import Card from "@/components/ui/Card";
 import Table from "@/components/ui/Table";
 import Button from "@/components/ui/Button";
@@ -12,7 +12,9 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function MonitoreoPage() {
   const [sesiones, setSesiones] = useState<SesionActiva[]>([]);
-  const [conteo, setConteo] = useState(0);
+  const [resumen, setResumen] = useState<SesionResumen[]>([]);
+  const [activas, setActivas] = useState(0);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [confirm, setConfirm] = useState<{
@@ -24,9 +26,15 @@ export default function MonitoreoPage() {
   const cargar = async () => {
     setLoading(true);
     try {
-      const [s, c] = await Promise.all([api.sesiones.listar(), api.sesiones.conteo()]);
+      const [s, c, r] = await Promise.all([
+        api.sesiones.listar(),
+        api.sesiones.conteo(),
+        api.sesiones.resumen(),
+      ]);
       setSesiones(s);
-      setConteo(c.activas);
+      setActivas(c.activas);
+      setTotal(c.total);
+      setResumen(r);
     } catch (e: any) {
       setToast({ message: e.message, type: "error" });
     } finally {
@@ -57,9 +65,42 @@ export default function MonitoreoPage() {
       <div className="grid-4">
         <div className="stat-card">
           <span className="stat-label">Usuarios en sesión</span>
-          <span className="stat-value">{conteo}</span>
+          <span className="stat-value">{activas}</span>
+        </div>
+        <div className="stat-card">
+          <span className="stat-label">Total sesiones históricas</span>
+          <span className="stat-value">{total}</span>
+        </div>
+        <div className="stat-card">
+          <span className="stat-label">Usuarios con sesión</span>
+          <span className="stat-value">{resumen.length}</span>
         </div>
       </div>
+
+      <Card>
+        <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "1rem" }}>
+          Resumen por usuario
+        </h3>
+        <Table
+          columns={[
+            { header: "Usuario", accessor: (s) => s.username, width: "120px" },
+            { header: "Nombre", accessor: (s) => s.nombre, width: "150px" },
+            {
+              header: "Rol",
+              accessor: (s) => (
+                <Badge variant={s.rol === "SUPER_ADMIN" ? "success" : s.rol === "ADMINISTRADOR" ? "info" : s.rol === "ANALISTA" ? "warning" : "neutral"}>
+                  {s.rol.replace(/_/g, " ")}
+                </Badge>
+              ),
+              width: "120px",
+            },
+            { header: "Total sesiones", accessor: (s) => s.totalSesiones.toString(), width: "120px" },
+            { header: "Sesiones activas", accessor: (s) => s.sesionesActivas.toString(), width: "130px" },
+          ]}
+          data={resumen}
+          keyExtractor={(s) => s.username}
+        />
+      </Card>
 
       <Card>
         <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "1rem" }}>

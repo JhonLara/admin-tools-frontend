@@ -1,1 +1,1 @@
-Fix fetchVoid para respuestas vacias DELETE  
+Fix sidebar responsive en m¢vil vertical  
