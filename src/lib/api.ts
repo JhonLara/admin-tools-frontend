@@ -30,6 +30,22 @@ async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+async function fetchVoid(path: string, options?: RequestInit): Promise<void> {
+  const res = await fetch(`${API_URL}${path}`, {
+    headers: getAuthHeaders(),
+    ...options,
+  });
+  if (!res.ok) {
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error(err.message || `Error ${res.status}`);
+  }
+}
+
 export interface Empresa {
   id: string;
   nombre: string;
@@ -177,7 +193,7 @@ export const api = {
     aprobar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/aprobar`, { method: "PATCH" }),
     firmaRecibida: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/firma-recibida`, { method: "PATCH" }),
     revisar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/revisado`, { method: "PATCH" }),
-    eliminar: (id: string) => fetchJson<void>(`/solicitudes/${id}`, { method: "DELETE" }),
+    eliminar: (id: string) => fetchVoid(`/solicitudes/${id}`, { method: "DELETE" }),
   },
   historial: {
     listar: () => fetchJson<HistorialNotificacion[]>("/historial-notificaciones"),
@@ -190,7 +206,7 @@ export const api = {
     listarPorAnalista: (analistaId: string) => fetchJson<HorarioAnalista[]>(`/horarios-analistas/analista/${analistaId}`),
     crear: (data: { analistaId: string; diasSemana: string[]; horaInicio: string; horaFin: string }) => fetchJson<HorarioAnalista[]>("/horarios-analistas", { method: "POST", body: JSON.stringify(data) }),
     actualizar: (id: string, data: { analistaId: string; diasSemana: string[]; horaInicio: string; horaFin: string }) => fetchJson<HorarioAnalista>(`/horarios-analistas/${id}`, { method: "PUT", body: JSON.stringify(data) }),
-    eliminar: (id: string) => fetchJson<void>(`/horarios-analistas/${id}`, { method: "DELETE" }),
+    eliminar: (id: string) => fetchVoid(`/horarios-analistas/${id}`, { method: "DELETE" }),
   },
   usuarios: {
     listar: () => fetchJson<Usuario[]>("/usuarios"),
@@ -201,7 +217,7 @@ export const api = {
   sesiones: {
     listar: () => fetchJson<SesionActiva[]>("/sesiones"),
     conteo: () => fetchJson<{ activas: number }>("/sesiones/conteo"),
-    invalidar: (id: string) => fetchJson<void>(`/sesiones/${id}`, { method: "DELETE" }),
+    invalidar: (id: string) => fetchVoid(`/sesiones/${id}`, { method: "DELETE" }),
   },
   aliadoEmpresaTelegram: {
     obtener: (aliadoId: string, empresaId: string) => fetchJson<AliadoEmpresaTelegram>(`/aliado-empresa-telegram?aliadoId=${aliadoId}&empresaId=${empresaId}`),

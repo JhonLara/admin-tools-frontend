@@ -1,1 +1,1 @@
-Agregar monitoreo, LoadingSpinner en todas las tablas, paginacion y fixes de formato  
+Fix fetchVoid para respuestas vacias DELETE  
