@@ -64,7 +64,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+      <div className="dashboard-charts">
         <div className="chart-card">
           <div className="chart-title">Solicitudes por aliado</div>
           <ResponsiveContainer width="100%" height={250}>
@@ -105,7 +105,8 @@ export default function DashboardPage() {
         <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "1rem" }}>
           Últimas solicitudes
         </h3>
-        <Table
+        <div className="dashboard-table-wrap">
+          <Table
           columns={[
             { header: "Cédula", accessor: (s) => s.cedulaCliente },
             { header: "Aliado", accessor: (s) => s.aliado.nombre },
@@ -141,6 +142,7 @@ export default function DashboardPage() {
           data={data.ultimasSolicitudes}
           keyExtractor={(s) => s.id}
         />
+        </div>
       </Card>
     </div>
   );

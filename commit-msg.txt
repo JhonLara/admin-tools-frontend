@@ -1,1 +1,1 @@
-Fix sidebar responsive en m¢vil vertical  
+Mejorar responsive del dashboard en movil  

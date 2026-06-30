@@ -636,6 +636,26 @@ html, body {
     padding: 0.3rem 0.5rem;
     font-size: 0.7rem;
   }
+
+  /* Dashboard: ocultar columnas Aliado y Analista en tabla de últimas solicitudes */
+  .dashboard-table-wrap .table th:nth-child(2),
+  .dashboard-table-wrap .table td:nth-child(2),
+  .dashboard-table-wrap .table th:nth-child(3),
+  .dashboard-table-wrap .table td:nth-child(3) {
+    display: none;
+  }
+}
+
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
 }
 
 .sidebar-mobile-toggle {
