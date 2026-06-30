@@ -121,6 +121,18 @@ export interface DashboardResumen {
   ultimasSolicitudes: Solicitud[];
 }
 
+export interface SesionActiva {
+  id: string;
+  username: string;
+  nombre: string;
+  rol: string;
+  ipAddress: string;
+  userAgent: string;
+  fechaInicio: string;
+  fechaExpiracion: string;
+  activa: boolean;
+}
+
 export interface AliadoEmpresaTelegram {
   id: string;
   aliadoId: string;
@@ -185,6 +197,11 @@ export const api = {
     crear: (data: { username: string; password: string; nombre: string; rol: string; analistaId?: string }) => fetchJson<Usuario>("/usuarios", { method: "POST", body: JSON.stringify(data) }),
     actualizar: (id: string, data: { username: string; password?: string; nombre: string; rol: string; analistaId?: string }) => fetchJson<Usuario>(`/usuarios/${id}`, { method: "PUT", body: JSON.stringify(data) }),
     cambiarEstado: (id: string) => fetchJson<Usuario>(`/usuarios/${id}/estado`, { method: "PATCH" }),
+  },
+  sesiones: {
+    listar: () => fetchJson<SesionActiva[]>("/sesiones"),
+    conteo: () => fetchJson<{ activas: number }>("/sesiones/conteo"),
+    invalidar: (id: string) => fetchJson<void>(`/sesiones/${id}`, { method: "DELETE" }),
   },
   aliadoEmpresaTelegram: {
     obtener: (aliadoId: string, empresaId: string) => fetchJson<AliadoEmpresaTelegram>(`/aliado-empresa-telegram?aliadoId=${aliadoId}&empresaId=${empresaId}`),

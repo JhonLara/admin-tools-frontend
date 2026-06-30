@@ -8,6 +8,7 @@ import Table from "@/components/ui/Table";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import Toast from "@/components/ui/Toast";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 interface Combinacion {
   aliado: Aliado;
@@ -78,7 +79,7 @@ export default function GruposTelegramPage() {
     }
   };
 
-  if (loading) return <div className="loading-state">Cargando configuraciones...</div>;
+  if (loading) return <LoadingSpinner message="Cargando configuraciones..." />;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>

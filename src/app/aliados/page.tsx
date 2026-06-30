@@ -10,6 +10,7 @@ import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import Badge from "@/components/ui/Badge";
 import Toast from "@/components/ui/Toast";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function AliadosPage() {
   const [aliados, setAliados] = useState<Aliado[]>([]);
@@ -83,7 +84,7 @@ export default function AliadosPage() {
     }
   };
 
-  if (loading) return <div className="loading-state">Cargando aliados...</div>;
+  if (loading) return <LoadingSpinner message="Cargando aliados..." />;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>

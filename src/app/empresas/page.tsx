@@ -9,6 +9,7 @@ import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import Badge from "@/components/ui/Badge";
 import Toast from "@/components/ui/Toast";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function EmpresasPage() {
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
@@ -71,7 +72,7 @@ export default function EmpresasPage() {
     }
   };
 
-  if (loading) return <div className="loading-state">Cargando empresas...</div>;
+  if (loading) return <LoadingSpinner message="Cargando empresas..." />;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>

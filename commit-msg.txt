@@ -1,1 +1,1 @@
-Agregar finalizar, botones condicionales por estado, LoadingSpinner, colores consistentes y formato de estados
+Agregar monitoreo, LoadingSpinner en todas las tablas, paginacion y fixes de formato  

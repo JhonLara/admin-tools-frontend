@@ -10,7 +10,7 @@ const ROLE_ROUTES: Record<Rol, string[]> = {
   VENDEDOR: ["/vendedores"],
   ANALISTA: ["/analistas"],
   ADMINISTRADOR: ["/dashboard", "/empresas", "/aliados", "/administracion-analistas", "/horarios-analistas", "/historial"],
-  SUPER_ADMIN: ["/dashboard", "/vendedores", "/analistas", "/empresas", "/aliados", "/administracion-analistas", "/horarios-analistas", "/grupos-telegram", "/usuarios", "/historial"],
+  SUPER_ADMIN: ["/dashboard", "/vendedores", "/analistas", "/empresas", "/aliados", "/administracion-analistas", "/horarios-analistas", "/grupos-telegram", "/usuarios", "/monitoreo", "/historial"],
 };
 
 function getHomeRoute(rol: Rol): string {

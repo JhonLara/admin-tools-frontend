@@ -9,6 +9,7 @@ import Table from "@/components/ui/Table";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import Toast from "@/components/ui/Toast";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const DIAS_SEMANA = [
   { value: "LUNES", label: "Lunes" },
@@ -104,7 +105,7 @@ export default function HorariosAnalistasPage() {
     horarios: horarios.filter((h) => h.analistaId === a.id && h.activo),
   }));
 
-  if (loading) return <div className="loading-state">Cargando horarios...</div>;
+  if (loading) return <LoadingSpinner message="Cargando horarios..." />;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>

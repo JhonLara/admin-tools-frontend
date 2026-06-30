@@ -7,6 +7,7 @@ import Select from "@/components/ui/Select";
 import Table from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
 import Toast from "@/components/ui/Toast";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function HistorialPage() {
   const [historial, setHistorial] = useState<HistorialNotificacion[]>([]);
@@ -33,7 +34,7 @@ export default function HistorialPage() {
     });
   }, [historial, filtroOrigen, filtroDestino, filtroEstado]);
 
-  if (loading) return <div className="loading-state">Cargando historial...</div>;
+  if (loading) return <LoadingSpinner message="Cargando historial..." />;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>

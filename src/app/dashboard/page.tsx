@@ -5,6 +5,7 @@ import { api, DashboardResumen, formatEstado } from "@/lib/api";
 import Card from "@/components/ui/Card";
 import Table from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import {
   BarChart,
   Bar,
@@ -34,7 +35,7 @@ export default function DashboardPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="loading-state">Cargando dashboard...</div>;
+  if (loading) return <LoadingSpinner message="Cargando dashboard..." />;
   if (error) return <div className="empty-state">Error: {error}</div>;
   if (!data) return null;
 
@@ -81,7 +82,7 @@ export default function DashboardPage() {
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
-                data={data.solicitudesPorEstado}
+                data={data.solicitudesPorEstado.map((s) => ({ ...s, estado: formatEstado(s.estado) }))}
                 dataKey="cantidad"
                 nameKey="estado"
                 cx="50%"

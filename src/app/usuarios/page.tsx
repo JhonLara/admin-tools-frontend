@@ -10,6 +10,7 @@ import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import Badge from "@/components/ui/Badge";
 import Toast from "@/components/ui/Toast";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const ROLES = [
   { value: "VENDEDOR", label: "Vendedor" },
@@ -108,7 +109,7 @@ export default function UsuariosPage() {
     return a ? a.nombre : id;
   };
 
-  if (loading) return <div className="loading-state">Cargando usuarios...</div>;
+  if (loading) return <LoadingSpinner message="Cargando usuarios..." />;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>

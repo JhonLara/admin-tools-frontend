@@ -14,6 +14,7 @@ const allLinks: { href: string; label: string; roles: Rol[] }[] = [
   { href: "/horarios-analistas", label: "Horarios de analistas", roles: ["ADMINISTRADOR", "SUPER_ADMIN"] },
   { href: "/grupos-telegram", label: "Grupos de Telegram", roles: ["SUPER_ADMIN"] },
   { href: "/usuarios", label: "Usuarios", roles: ["SUPER_ADMIN"] },
+  { href: "/monitoreo", label: "Monitoreo", roles: ["SUPER_ADMIN"] },
   { href: "/historial", label: "Historial de notificaciones", roles: ["ADMINISTRADOR", "SUPER_ADMIN"] },
 ];
 
@@ -52,7 +53,7 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           {user && (
             <div className="sidebar-user">
               <span className="sidebar-username">{user.nombre}</span>
-              <span className="sidebar-role">{user.rol}</span>
+              <span className="sidebar-role">{user.rol.replace(/_/g, " ")}</span>
             </div>
           )}
           <button className="sidebar-logout" onClick={logout}>
