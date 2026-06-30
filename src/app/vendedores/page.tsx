@@ -119,6 +119,16 @@ export default function VendedoresPage() {
     }
   };
 
+  const revisarSolicitud = async (id: string) => {
+    try {
+      await api.solicitudes.revisar(id);
+      setToast({ message: "Observación marcada como revisada", type: "success" });
+      cargar();
+    } catch (e: any) {
+      setToast({ message: e.message, type: "error" });
+    }
+  };
+
   const eliminarSolicitud = (id: string) => {
     setConfirm({
       open: true,
@@ -230,6 +240,11 @@ export default function VendedoresPage() {
                   header: "Acciones",
                   accessor: (s) => (
                     <div className="flex action-group" style={{ flexWrap: "wrap", alignItems: "center", minHeight: 28 }}>
+                      {s.estado === "NOTIFICADA" && (
+                        <Button size="sm" variant="info" onClick={() => revisarSolicitud(s.id)}>
+                          Revisado
+                        </Button>
+                      )}
                       {s.estado === "VALIDADA" && (
                         <Button size="sm" variant="success" onClick={() => marcarFirmaRecibida(s.id)}>
                           Firmó

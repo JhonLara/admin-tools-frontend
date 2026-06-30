@@ -161,6 +161,7 @@ export const api = {
     rechazar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/rechazar`, { method: "PATCH" }),
     aprobar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/aprobar`, { method: "PATCH" }),
     firmaRecibida: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/firma-recibida`, { method: "PATCH" }),
+    revisar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/revisado`, { method: "PATCH" }),
     eliminar: (id: string) => fetchJson<void>(`/solicitudes/${id}`, { method: "DELETE" }),
   },
   historial: {
