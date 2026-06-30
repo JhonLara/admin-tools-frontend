@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { api, Aliado, Solicitud } from "@/lib/api";
+import { api, Aliado, Solicitud, formatEstado } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
@@ -11,6 +11,7 @@ import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import Toast from "@/components/ui/Toast";
 import ConfirmModal from "@/components/ui/ConfirmModal";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function AnalistasPage() {
   const { user } = useAuth();
@@ -152,7 +153,7 @@ export default function AnalistasPage() {
     });
   };
 
-  if (loading) return <div className="loading-state">Cargando solicitudes...</div>;
+  if (loading) return <LoadingSpinner message="Cargando solicitudes..." />;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
@@ -171,8 +172,8 @@ export default function AnalistasPage() {
                 { value: "EN_PROCESO", label: "En proceso" },
                 { value: "RECHAZADA", label: "Rechazada" },
                 { value: "VALIDADA", label: "Validada" },
+                { value: "FIRMA_RECIBIDA", label: "Firma recibida" },
                 { value: "APROBADA", label: "Aprobada" },
-                { value: "FINALIZADA", label: "Finalizada" },
                 { value: "ERROR_NOTIFICACION", label: "Error notificación" },
               ]}
               value={filtroEstado}
@@ -211,23 +212,23 @@ export default function AnalistasPage() {
                 <Badge
                   variant={
                     s.estado === "ASIGNADA"
-                      ? "asignada"
+                      ? "info"
                       : s.estado === "NOTIFICADA"
-                      ? "notificada"
+                      ? "warning"
                       : s.estado === "RECHAZADA"
                       ? "error"
                       : s.estado === "VALIDADA"
-                      ? "notificada"
+                      ? "info"
+                      : s.estado === "FIRMA_RECIBIDA"
+                      ? "info"
                       : s.estado === "APROBADA"
                       ? "success"
-                      : s.estado === "FINALIZADA"
-                      ? "finalizada"
                       : s.estado === "ERROR_NOTIFICACION"
-                      ? "error-notif"
-                      : "pendiente"
+                      ? "error"
+                      : "neutral"
                   }
                 >
-                  {s.estado}
+                  {formatEstado(s.estado)}
                 </Badge>
               ),
             },
@@ -236,20 +237,28 @@ export default function AnalistasPage() {
               header: "Acciones",
               accessor: (s) => (
                 <div className="flex action-group" style={{ flexWrap: "wrap", alignItems: "center", minHeight: 28 }}>
-                  <Button size="sm" variant="info" onClick={() => notificar(s.id)}>
-                    Notificar
-                  </Button>
-                  <Button size="sm" variant="warning" onClick={() => validar(s.id)}>
-                    Validar
-                  </Button>
-                  <Button size="sm" variant="danger" onClick={() => rechazar(s.id)}>
-                    Rechazar
-                  </Button>
-                  <Button size="sm" variant="success" onClick={() => aprobar(s.id)}>
-                    Aprobar
-                  </Button>
+                  {(s.estado === "ASIGNADA" || s.estado === "EN_PROCESO" || s.estado === "FIRMA_RECIBIDA") && (
+                    <Button size="sm" variant="info" onClick={() => notificar(s.id)}>
+                      Notificar
+                    </Button>
+                  )}
+                  {(s.estado === "ASIGNADA" || s.estado === "EN_PROCESO") && (
+                    <Button size="sm" variant="warning" onClick={() => validar(s.id)}>
+                      Validar
+                    </Button>
+                  )}
+                  {(s.estado === "ASIGNADA" || s.estado === "EN_PROCESO" || s.estado === "FIRMA_RECIBIDA") && (
+                    <Button size="sm" variant="danger" onClick={() => rechazar(s.id)}>
+                      Rechazar
+                    </Button>
+                  )}
+                  {s.estado === "FIRMA_RECIBIDA" && (
+                    <Button size="sm" variant="success" onClick={() => aprobar(s.id)}>
+                      Aprobar
+                    </Button>
+                  )}
                   {esSuperAdmin && (
-                    <Button size="sm" variant="danger" onClick={() => eliminarSolicitud(s.id)}>
+                    <Button size="sm" variant="secondary" onClick={() => eliminarSolicitud(s.id)}>
                       Eliminar
                     </Button>
                   )}

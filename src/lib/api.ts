@@ -9,6 +9,10 @@ function getAuthHeaders(): HeadersInit {
   return headers;
 }
 
+export function formatEstado(estado: string): string {
+  return estado.replace(/_/g, " ");
+}
+
 async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     headers: getAuthHeaders(),
@@ -155,7 +159,6 @@ export const api = {
     obtener: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}`),
     crear: (data: { cedulaCliente: string; aliadoId: string; empresaId: string }) => fetchJson<Solicitud>("/solicitudes", { method: "POST", body: JSON.stringify(data) }),
     listarPorVendedor: () => fetchJson<Solicitud[]>("/solicitudes/mis-solicitudes-vendedor"),
-    finalizar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/finalizar`, { method: "PATCH" }),
     notificarObservacion: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/notificar-observacion`, { method: "POST" }),
     validar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/validar`, { method: "PATCH" }),
     rechazar: (id: string) => fetchJson<Solicitud>(`/solicitudes/${id}/rechazar`, { method: "PATCH" }),

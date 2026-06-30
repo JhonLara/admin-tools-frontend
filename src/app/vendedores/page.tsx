@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api, Aliado, Empresa, Solicitud } from "@/lib/api";
+import { api, Aliado, Empresa, Solicitud, formatEstado } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
@@ -11,17 +11,18 @@ import Table from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
 import Toast from "@/components/ui/Toast";
 import ConfirmModal from "@/components/ui/ConfirmModal";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const ESTADO_LABEL: Record<string, string> = {
-  CREADA: "Creada",
-  ASIGNADA: "Asignada",
-  NOTIFICADA: "Novedad",
-  EN_PROCESO: "En proceso",
-  VALIDADA: "Firma pendiente",
-  FIRMA_RECIBIDA: "Firma recibida",
-  RECHAZADA: "Rechazada",
-  APROBADA: "Aprobada",
-  FINALIZADA: "Finalizada",
+  CREADA: "CREADA",
+  ASIGNADA: "ASIGNADA",
+  NOTIFICADA: "NOTIFICADA",
+  EN_PROCESO: "EN PROCESO",
+  VALIDADA: "VALIDADA",
+  FIRMA_RECIBIDA: "FIRMA RECIBIDA",
+  RECHAZADA: "RECHAZADA",
+  APROBADA: "APROBADA",
+  ERROR_NOTIFICACION: "ERROR NOTIFICACION",
 };
 
 const ESTADO_VARIANT: Record<string, "success" | "warning" | "error" | "info" | "neutral"> = {
@@ -33,7 +34,7 @@ const ESTADO_VARIANT: Record<string, "success" | "warning" | "error" | "info" | 
   FIRMA_RECIBIDA: "info",
   RECHAZADA: "error",
   APROBADA: "success",
-  FINALIZADA: "success",
+  ERROR_NOTIFICACION: "error",
 };
 
 export default function VendedoresPage() {
@@ -47,6 +48,7 @@ export default function VendedoresPage() {
   const [aliadoId, setAliadoId] = useState("");
   const [empresaId, setEmpresaId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [tableLoading, setTableLoading] = useState(true);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [resultado, setResultado] = useState<Solicitud | null>(null);
   const [confirm, setConfirm] = useState<{
@@ -57,6 +59,7 @@ export default function VendedoresPage() {
   }>({ open: false, title: "", message: "", onConfirm: () => {} });
 
   const cargar = async () => {
+    setTableLoading(true);
     try {
       const [ali, emp] = await Promise.all([
         api.aliados.listarActivos(),
@@ -72,6 +75,8 @@ export default function VendedoresPage() {
       setMisSolicitudes(sols);
     } catch (e: any) {
       setToast({ message: e.message, type: "error" });
+    } finally {
+      setTableLoading(false);
     }
   };
 
@@ -221,48 +226,52 @@ export default function VendedoresPage() {
         <div style={{ flex: "1 1 500px", minWidth: 280 }}>
           <Card>
             <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "1rem" }}>Mis solicitudes</h3>
-            <Table
-              columns={[
-                { header: "Cédula", accessor: (s) => s.cedulaCliente, width: "110px" },
-                { header: "Aliado", accessor: (s) => s.aliado.nombre, width: "140px" },
-                { header: "Empresa", accessor: (s) => s.empresa.nombre, width: "140px" },
-                { header: "Analista", accessor: (s) => s.analista?.nombre || "-", width: "130px" },
-                {
-                  header: "Estado",
-                  accessor: (s) => (
-                    <Badge variant={ESTADO_VARIANT[s.estado] || "neutral"}>
-                      {ESTADO_LABEL[s.estado] || s.estado}
-                    </Badge>
-                  ),
-                  width: "120px",
-                },
-                {
-                  header: "Acciones",
-                  accessor: (s) => (
-                    <div className="flex action-group" style={{ flexWrap: "wrap", alignItems: "center", minHeight: 28 }}>
-                      {s.estado === "NOTIFICADA" && (
-                        <Button size="sm" variant="info" onClick={() => revisarSolicitud(s.id)}>
-                          Revisado
-                        </Button>
-                      )}
-                      {s.estado === "VALIDADA" && (
-                        <Button size="sm" variant="success" onClick={() => marcarFirmaRecibida(s.id)}>
-                          Firmó
-                        </Button>
-                      )}
-                      {esSuperAdmin && (
-                        <Button size="sm" variant="danger" onClick={() => eliminarSolicitud(s.id)}>
-                          Eliminar
-                        </Button>
-                      )}
-                    </div>
-                  ),
-                  width: "130px",
-                },
-              ]}
-              data={misSolicitudes}
-              keyExtractor={(s) => s.id}
-            />
+            {tableLoading ? (
+              <LoadingSpinner message="Cargando solicitudes..." />
+            ) : (
+              <Table
+                columns={[
+                  { header: "Cédula", accessor: (s) => s.cedulaCliente, width: "110px" },
+                  { header: "Aliado", accessor: (s) => s.aliado.nombre, width: "140px" },
+                  { header: "Empresa", accessor: (s) => s.empresa.nombre, width: "140px" },
+                  { header: "Analista", accessor: (s) => s.analista?.nombre || "-", width: "130px" },
+                  {
+                    header: "Estado",
+                    accessor: (s) => (
+                      <Badge variant={ESTADO_VARIANT[s.estado] || "neutral"}>
+                        {ESTADO_LABEL[s.estado] || formatEstado(s.estado)}
+                      </Badge>
+                    ),
+                    width: "120px",
+                  },
+                  {
+                    header: "Acciones",
+                    accessor: (s) => (
+                      <div className="flex action-group" style={{ flexWrap: "wrap", alignItems: "center", minHeight: 28 }}>
+                        {s.estado === "NOTIFICADA" && (
+                          <Button size="sm" variant="info" onClick={() => revisarSolicitud(s.id)}>
+                            Revisado
+                          </Button>
+                        )}
+                        {s.estado === "VALIDADA" && (
+                          <Button size="sm" variant="success" onClick={() => marcarFirmaRecibida(s.id)}>
+                            Firmó
+                          </Button>
+                        )}
+                        {esSuperAdmin && (
+                          <Button size="sm" variant="secondary" onClick={() => eliminarSolicitud(s.id)}>
+                            Eliminar
+                          </Button>
+                        )}
+                      </div>
+                    ),
+                    width: "130px",
+                  },
+                ]}
+                data={misSolicitudes}
+                keyExtractor={(s) => s.id}
+              />
+            )}
           </Card>
         </div>
       </div>

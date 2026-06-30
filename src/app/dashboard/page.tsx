@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api, DashboardResumen } from "@/lib/api";
+import { api, DashboardResumen, formatEstado } from "@/lib/api";
 import Card from "@/components/ui/Card";
 import Table from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
@@ -115,17 +115,23 @@ export default function DashboardPage() {
                 <Badge
                   variant={
                     s.estado === "ASIGNADA"
-                      ? "asignada"
+                      ? "info"
                       : s.estado === "NOTIFICADA"
-                      ? "notificada"
-                      : s.estado === "FINALIZADA"
-                      ? "finalizada"
+                      ? "warning"
+                      : s.estado === "VALIDADA"
+                      ? "info"
+                      : s.estado === "FIRMA_RECIBIDA"
+                      ? "info"
+                      : s.estado === "APROBADA"
+                      ? "success"
+                      : s.estado === "RECHAZADA"
+                      ? "error"
                       : s.estado === "ERROR_NOTIFICACION"
-                      ? "error-notif"
-                      : "pendiente"
+                      ? "error"
+                      : "neutral"
                   }
                 >
-                  {s.estado}
+                  {formatEstado(s.estado)}
                 </Badge>
               ),
             },
