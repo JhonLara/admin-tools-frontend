@@ -658,8 +658,10 @@ html, body {
   }
 }
 
-.sidebar-mobile-toggle {
-  display: none;
+@media (min-width: 641px) {
+  .sidebar-mobile-toggle {
+    display: none;
+  }
 }
 
 .chart-card {
