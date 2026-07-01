@@ -237,4 +237,11 @@ export const api = {
     obtener: (aliadoId: string, empresaId: string) => fetchJson<AliadoEmpresaTelegram>(`/aliado-empresa-telegram?aliadoId=${aliadoId}&empresaId=${empresaId}`),
     guardar: (data: { aliadoId: string; empresaId: string; telegramChatId: string }) => fetchJson<AliadoEmpresaTelegram>("/aliado-empresa-telegram", { method: "POST", body: JSON.stringify(data) }),
   },
+  version: {
+    obtener: () => fetchJson<{ version: string; aplicacion: string }>("/version"),
+  },
+  despliegue: {
+    notificar: (data: { version: string; exitoso: boolean; error?: string; componente?: string }) =>
+      fetchJson<{ mensaje: string; version: string; estado: string; fecha: string }>("/admin/despliegue/notificar", { method: "POST", body: JSON.stringify(data) }),
+  },
 };

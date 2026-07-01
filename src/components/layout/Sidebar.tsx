@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth, Rol } from "@/contexts/AuthContext";
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
 
 const allLinks: { href: string; label: string; roles: Rol[] }[] = [
   { href: "/dashboard", label: "Dashboard", roles: ["ADMINISTRADOR", "SUPER_ADMIN"] },
@@ -26,6 +28,13 @@ interface SidebarProps {
 export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const [version, setVersion] = useState<string>("");
+
+  useEffect(() => {
+    api.version.obtener()
+      .then((res) => setVersion(res.version))
+      .catch(() => setVersion(""));
+  }, []);
 
   const visibleLinks = allLinks.filter((l) => user && l.roles.includes(user.rol));
 
@@ -59,6 +68,9 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           <button className="sidebar-logout" onClick={logout}>
             Cerrar sesión
           </button>
+          {version && (
+            <span className="sidebar-version">v{version}</span>
+          )}
         </div>
       </aside>
     </>

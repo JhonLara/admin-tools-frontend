@@ -171,6 +171,14 @@ html, body {
   color: #FCA5A5;
 }
 
+.sidebar-version {
+  font-size: 0.7rem;
+  color: var(--color-accent-soft);
+  opacity: 0.7;
+  text-align: center;
+  padding-top: 0.25rem;
+}
+
 .main-content {
   flex: 1;
   margin-left: 260px;
