@@ -11,13 +11,25 @@ interface TableProps<T> {
   data: T[];
   keyExtractor: (row: T) => string;
   pageSize?: number;
+  onRefresh?: () => void;
 }
 
-export default function Table<T>({ columns, data, keyExtractor, pageSize = 50 }: TableProps<T>) {
+export default function Table<T>({ columns, data, keyExtractor, pageSize = 50, onRefresh }: TableProps<T>) {
   const [page, setPage] = useState(0);
 
   if (data.length === 0) {
-    return <div className="empty-state">No hay registros</div>;
+    return (
+      <div>
+        {onRefresh && (
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "0.75rem" }}>
+            <button className="btn btn-sm btn-secondary" onClick={onRefresh}>
+              ⟳ Actualizar
+            </button>
+          </div>
+        )}
+        <div className="empty-state">No hay registros</div>
+      </div>
+    );
   }
 
   const totalPages = Math.ceil(data.length / pageSize);
@@ -26,6 +38,13 @@ export default function Table<T>({ columns, data, keyExtractor, pageSize = 50 }:
 
   return (
     <div>
+      {onRefresh && (
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "0.75rem" }}>
+          <button className="btn btn-sm btn-secondary" onClick={onRefresh}>
+            ⟳ Actualizar
+          </button>
+        </div>
+      )}
       <div className="table-container">
         <table className="table">
           <thead>

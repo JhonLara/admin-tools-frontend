@@ -128,6 +128,7 @@ export default function AdminAnalistasPage() {
           ]}
           data={analistas}
           keyExtractor={(a) => a.id}
+          onRefresh={cargar}
         />
       </Card>
 

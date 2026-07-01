@@ -51,6 +51,7 @@ export default function VendedoresPage() {
   const [tableLoading, setTableLoading] = useState(true);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [resultado, setResultado] = useState<Solicitud | null>(null);
+  const [filtroCedula, setFiltroCedula] = useState("");
   const [confirm, setConfirm] = useState<{
     open: boolean;
     title: string;
@@ -116,8 +117,8 @@ export default function VendedoresPage() {
 
   const marcarFirmaRecibida = async (id: string) => {
     try {
-      await api.solicitudes.firmaRecibida(id);
-      setToast({ message: "Firma marcada como recibida", type: "success" });
+      const res = await api.solicitudes.firmaRecibida(id);
+      setToast({ message: res.mensaje || "Firma marcada como recibida", type: "success" });
       cargar();
     } catch (e: any) {
       setToast({ message: e.message, type: "error" });
@@ -126,8 +127,8 @@ export default function VendedoresPage() {
 
   const revisarSolicitud = async (id: string) => {
     try {
-      await api.solicitudes.revisar(id);
-      setToast({ message: "Observación marcada como revisada", type: "success" });
+      const res = await api.solicitudes.revisar(id);
+      setToast({ message: res.mensaje || "Observación marcada como revisada", type: "success" });
       cargar();
     } catch (e: any) {
       setToast({ message: e.message, type: "error" });
@@ -225,7 +226,23 @@ export default function VendedoresPage() {
         {/* Tabla — derecha en escritorio, todo el ancho */}
         <div style={{ flex: "1 1 500px", minWidth: 280 }}>
           <Card>
-            <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "1rem" }}>Mis solicitudes</h3>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1rem" }}>
+              <h3 style={{ fontSize: "1rem", fontWeight: 700 }}>Mis solicitudes</h3>
+              <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <Input
+                  value={filtroCedula}
+                  onChange={(e) => setFiltroCedula(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Filtrar por cédula..."
+                  inputMode="numeric"
+                  style={{ fontSize: "0.85rem", padding: "0.4rem 0.6rem", width: 180 }}
+                />
+                {filtroCedula && (
+                  <Button size="sm" variant="secondary" onClick={() => setFiltroCedula("")}>
+                    Limpiar
+                  </Button>
+                )}
+              </div>
+            </div>
             {tableLoading ? (
               <LoadingSpinner message="Cargando solicitudes..." />
             ) : (
@@ -268,8 +285,11 @@ export default function VendedoresPage() {
                     width: "130px",
                   },
                 ]}
-                data={misSolicitudes}
+                data={misSolicitudes.filter((s) =>
+                  filtroCedula ? s.cedulaCliente.includes(filtroCedula) : true
+                )}
                 keyExtractor={(s) => s.id}
+                onRefresh={cargar}
               />
             )}
           </Card>

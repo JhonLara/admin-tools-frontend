@@ -80,6 +80,7 @@ export interface Solicitud {
   fechaCreacion: string;
   fechaAsignacion: string | null;
   fechaFinalizacion: string | null;
+  mensaje?: string;
 }
 
 export interface HistorialNotificacion {

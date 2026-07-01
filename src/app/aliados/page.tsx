@@ -126,6 +126,7 @@ export default function AliadosPage() {
           ]}
           data={aliados}
           keyExtractor={(a) => a.id}
+          onRefresh={cargar}
         />
       </Card>
 

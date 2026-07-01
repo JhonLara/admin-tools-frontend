@@ -123,6 +123,7 @@ export default function GruposTelegramPage() {
           ]}
           data={combinaciones}
           keyExtractor={(c) => `${c.aliado.id}-${c.empresa.id}`}
+          onRefresh={cargar}
         />
       </Card>
 

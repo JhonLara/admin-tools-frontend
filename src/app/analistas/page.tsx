@@ -268,6 +268,7 @@ export default function AnalistasPage() {
           ]}
           data={filtradas}
           keyExtractor={(s) => s.id}
+          onRefresh={cargar}
         />
       </Card>
 

@@ -746,3 +746,221 @@ html, body {
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
+
+/* Horarios Analistas Layout */
+.horarios-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.5rem;
+  min-height: 0;
+}
+
+.horarios-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.horarios-analista-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.horarios-analista-item:hover {
+  border-color: var(--color-accent);
+  background: var(--color-primary-soft);
+}
+
+.horarios-analista-item.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+  box-shadow: 0 0 0 2px var(--color-accent-soft);
+}
+
+.horarios-analista-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.horarios-analista-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.horarios-analista-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-main);
+}
+
+.horarios-analista-meta {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.horarios-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.horarios-dia-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.horarios-dia-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.85rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.horarios-dia-row:hover {
+  border-color: var(--color-accent);
+}
+
+.horarios-dia-row.expanded {
+  cursor: default;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-soft);
+}
+
+.horarios-dia-arrow {
+  display: inline-block;
+  width: 1.2rem;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  transition: transform 0.15s ease;
+}
+
+.horarios-dia-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-text-main);
+}
+
+.horarios-dia-summary {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.horarios-dia-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.horarios-dia-empty {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-style: italic;
+  padding: 0.25rem 0;
+}
+
+.horarios-intervalos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.horario-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.7rem;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.horario-pill-actions {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.horario-pill-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.15rem;
+  border-radius: 4px;
+  color: var(--color-primary);
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+  font-size: 0.75rem;
+}
+
+.horario-pill-btn:hover {
+  opacity: 1;
+  background: rgba(4, 120, 87, 0.15);
+}
+
+@media (max-width: 768px) {
+  .horarios-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .horarios-sidebar {
+    max-height: 220px;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-right: 0;
+    padding-bottom: 0.25rem;
+  }
+
+  .horarios-analista-item {
+    min-width: 200px;
+  }
+
+  .horarios-dia-row {
+    gap: 0.5rem;
+  }
+
+  .horarios-dia-summary {
+    margin-left: 0;
+    width: 100%;
+    padding-left: 1.55rem;
+  }
+
+  .horarios-dia-label {
+    width: auto;
+  }
+}

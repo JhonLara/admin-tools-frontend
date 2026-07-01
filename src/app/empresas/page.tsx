@@ -112,6 +112,7 @@ export default function EmpresasPage() {
           ]}
           data={empresas}
           keyExtractor={(e) => e.id}
+          onRefresh={cargar}
         />
       </Card>
 

@@ -27,12 +27,21 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const cargar = async () => {
+    setLoading(true);
+    try {
+      const res = await api.dashboard.resumen();
+      setData(res);
+      setError("");
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    api.dashboard
-      .resumen()
-      .then(setData)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
+    cargar();
   }, []);
 
   if (loading) return <LoadingSpinner message="Cargando dashboard..." />;
@@ -107,6 +116,7 @@ export default function DashboardPage() {
         </h3>
         <div className="dashboard-table-wrap">
           <Table
+          onRefresh={cargar}
           columns={[
             { header: "Cédula", accessor: (s) => s.cedulaCliente },
             { header: "Aliado", accessor: (s) => s.aliado.nombre },

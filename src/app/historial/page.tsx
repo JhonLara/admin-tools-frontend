@@ -17,12 +17,20 @@ export default function HistorialPage() {
   const [filtroEstado, setFiltroEstado] = useState("");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
+  const cargar = async () => {
+    setLoading(true);
+    try {
+      const data = await api.historial.listar();
+      setHistorial(data);
+    } catch (e: any) {
+      setToast({ message: e.message, type: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    api.historial
-      .listar()
-      .then(setHistorial)
-      .catch((e) => setToast({ message: e.message, type: "error" }))
-      .finally(() => setLoading(false));
+    cargar();
   }, []);
 
   const filtrado = useMemo(() => {
@@ -84,6 +92,7 @@ export default function HistorialPage() {
         </div>
 
         <Table
+          onRefresh={cargar}
           columns={[
             { header: "Fecha", accessor: (h) => new Date(h.fechaEnvio).toLocaleString() },
             { header: "Cédula", accessor: (h) => h.cedulaCliente },

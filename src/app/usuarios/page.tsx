@@ -154,6 +154,7 @@ export default function UsuariosPage() {
           ]}
           data={usuarios}
           keyExtractor={(u) => u.id}
+          onRefresh={cargar}
         />
       </Card>
 

@@ -99,6 +99,7 @@ export default function MonitoreoPage() {
           ]}
           data={resumen}
           keyExtractor={(s) => s.username}
+          onRefresh={cargar}
         />
       </Card>
 
@@ -138,6 +139,7 @@ export default function MonitoreoPage() {
           ]}
           data={sesiones}
           keyExtractor={(s) => s.id}
+          onRefresh={cargar}
         />
       </Card>
 
