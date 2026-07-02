@@ -21,7 +21,7 @@ const menuGroups: MenuGroup[] = [
   {
     title: "Solicitudes",
     items: [
-      { href: "/dashboard", label: "Dashboard", roles: ["ADMINISTRADOR", "SUPER_ADMIN"] },
+      { href: "/resumen", label: "Resumen", roles: ["ADMINISTRADOR", "SUPER_ADMIN"] },
       { href: "/vendedores", label: "Vendedores", roles: ["VENDEDOR", "SUPER_ADMIN"] },
       { href: "/analistas", label: "Analistas", roles: ["ANALISTA", "SUPER_ADMIN"] },
       { href: "/empresas", label: "Empresas", roles: ["ADMINISTRADOR", "SUPER_ADMIN"] },
@@ -34,7 +34,7 @@ const menuGroups: MenuGroup[] = [
   {
     title: "Cartera",
     items: [
-      { href: "/cartera", label: "Dashboard", roles: ["ADMINISTRADOR", "SUPER_ADMIN"] },
+      { href: "/dashboard", label: "Dashboard", roles: ["ADMINISTRADOR", "SUPER_ADMIN"] },
     ],
   },
   {

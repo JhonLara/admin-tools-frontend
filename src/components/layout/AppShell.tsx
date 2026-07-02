@@ -9,14 +9,14 @@ import Topbar from "./Topbar";
 const ROLE_ROUTES: Record<Rol, string[]> = {
   VENDEDOR: ["/vendedores"],
   ANALISTA: ["/analistas"],
-  ADMINISTRADOR: ["/dashboard", "/empresas", "/aliados", "/administracion-analistas", "/horarios-analistas", "/historial"],
-  SUPER_ADMIN: ["/dashboard", "/vendedores", "/analistas", "/empresas", "/aliados", "/administracion-analistas", "/horarios-analistas", "/grupos-telegram", "/usuarios", "/monitoreo", "/historial"],
+  ADMINISTRADOR: ["/resumen", "/empresas", "/aliados", "/administracion-analistas", "/horarios-analistas", "/historial", "/dashboard"],
+  SUPER_ADMIN: ["/resumen", "/dashboard", "/vendedores", "/analistas", "/empresas", "/aliados", "/administracion-analistas", "/horarios-analistas", "/grupos-telegram", "/usuarios", "/monitoreo", "/historial"],
 };
 
 function getHomeRoute(rol: Rol): string {
   if (rol === "VENDEDOR") return "/vendedores";
   if (rol === "ANALISTA") return "/analistas";
-  return "/dashboard";
+  return "/resumen";
 }
 
 export default function AppShell({ children }: { children: React.ReactNode }) {

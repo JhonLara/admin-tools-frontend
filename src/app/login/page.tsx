@@ -36,7 +36,7 @@ export default function LoginPage() {
       } else if (userRol === "ANALISTA") {
         router.push("/analistas");
       } else {
-        router.push("/dashboard");
+        router.push("/resumen");
       }
     } catch (e: any) {
       setError(e.message || "Usuario o contraseña incorrectos");
