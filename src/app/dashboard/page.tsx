@@ -250,8 +250,8 @@ export default function CarteraPage() {
               </p>
               <p style={{ fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>COP</p>
             </div>
-            <div style={{ overflow: "auto", maxHeight: 280 }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem", minWidth: 280 }}>
+            <div style={{ overflowX: "auto", maxHeight: 280 }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem" }}>
                 <thead>
                   <tr style={{ borderBottom: "1px solid var(--color-border)", textAlign: "left" }}>
                     <th style={{ padding: "8px 4px", color: "var(--color-text-secondary)", fontWeight: 600 }}>Tipo</th>

@@ -827,13 +827,15 @@ html, body {
 
 .cartera-row {
   display: flex;
+  flex-direction: column;
   gap: 1.5rem;
-  flex-wrap: wrap;
 }
 
 .cartera-col {
-  flex: 1;
+  flex: 1 1 100%;
   min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 16px;
@@ -843,19 +845,21 @@ html, body {
 
 .cartera-line-row {
   display: flex;
+  flex-direction: column;
   gap: 2rem;
   align-items: flex-start;
 }
 
 .cartera-line-sidebar {
-  min-width: 160px;
-  padding-top: 2rem;
+  min-width: 100%;
+  padding-top: 0;
 }
 
 .donut-legend {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
   margin-top: 1rem;
 }
 
@@ -865,6 +869,31 @@ html, body {
   border-radius: 16px;
   padding: 1.5rem 2rem;
   box-shadow: var(--shadow-soft);
+}
+
+/* Desktop: sidebar fijo 260px + contenido. 1024px viewport = ~764px contenido */
+@media (min-width: 1024px) {
+  .cartera-row {
+    flex-direction: row;
+  }
+
+  .cartera-col {
+    flex: 1;
+  }
+
+  .cartera-line-row {
+    flex-direction: row;
+  }
+
+  .cartera-line-sidebar {
+    min-width: 160px;
+    padding-top: 2rem;
+  }
+
+  .donut-legend {
+    flex-wrap: nowrap;
+    gap: 2rem;
+  }
 }
 
 @media (max-width: 640px) {
@@ -896,25 +925,8 @@ html, body {
   }
 
   .cartera-col {
-    flex: 1 1 100%;
-    min-width: 100%;
     padding: 1rem;
     border-radius: 12px;
-  }
-
-  .cartera-line-row {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .cartera-line-sidebar {
-    min-width: 100%;
-    padding-top: 0;
-  }
-
-  .donut-legend {
-    flex-wrap: wrap;
-    gap: 1rem;
   }
 
   .mora-table-wrap {
