@@ -165,6 +165,29 @@ export interface AliadoEmpresaTelegram {
   telegramChatId: string;
 }
 
+export interface BackupConfig {
+  id: string;
+  tipo: string;
+  activo: boolean;
+  retencionDias: number;
+  generarReporte: boolean;
+  destinoReporte: string;
+  ultimaEjecucion: string;
+  siguienteEjecucion: string;
+}
+
+export interface BackupEjecucion {
+  id: string;
+  tipo: string;
+  estado: string;
+  periodo: string;
+  registrosProcesados: number;
+  reporteGenerado: boolean;
+  reporteUrl: string;
+  mensajeError: string;
+  fechaEjecucion: string;
+}
+
 export const api = {
   auth: {
     login: (data: { username: string; password: string }) => fetchJson<Usuario>("/auth/login", { method: "POST", body: JSON.stringify(data) }),
@@ -243,5 +266,33 @@ export const api = {
   despliegue: {
     notificar: (data: { version: string; exitoso: boolean; error?: string; componente?: string }) =>
       fetchJson<{ mensaje: string; version: string; estado: string; fecha: string }>("/admin/despliegue/notificar", { method: "POST", body: JSON.stringify(data) }),
+  },
+  backup: {
+    listarConfig: () => fetchJson<BackupConfig[]>("/admin/backup/config"),
+    actualizarConfig: (id: string, data: { activo: boolean; retencionDias: number; generarReporte: boolean; destinoReporte: string }) =>
+      fetchJson<BackupConfig>(`/admin/backup/config/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+    ejecutarManual: (tipo: string) => fetchJson<{ mensaje: string; tipo: string; fecha: string }>(`/admin/backup/ejecutar/${tipo}`, { method: "POST" }),
+    listarEjecuciones: () => fetchJson<BackupEjecucion[]>("/admin/backup/ejecuciones"),
+  },
+  cartera: {
+    creditsByMaturity: (cutoffDate: string, creditType?: string, branch?: string, clientGroup?: string) => {
+      const params = new URLSearchParams({ cutoffDate });
+      if (creditType) params.append("creditType", creditType);
+      if (branch) params.append("branch", branch);
+      if (clientGroup) params.append("clientGroup", clientGroup);
+      return fetchJson<any>(`/reports/credits-by-maturity?${params.toString()}`);
+    },
+    loanList: (startDate: string, endDate: string, creditType?: string, branch?: string, clientGroup?: string) => {
+      const params = new URLSearchParams({ startDate, endDate });
+      if (creditType) params.append("creditType", creditType);
+      if (branch) params.append("branch", branch);
+      if (clientGroup) params.append("clientGroup", clientGroup);
+      return fetchJson<any>(`/reports/loan-list?${params.toString()}`);
+    },
+    paymentsDetails: (startDate: string, endDate: string, branch?: string) => {
+      const params = new URLSearchParams({ startDate, endDate });
+      if (branch) params.append("branch", branch);
+      return fetchJson<any>(`/reports/payments-details?${params.toString()}`);
+    },
   },
 };

@@ -96,6 +96,43 @@ html, body {
   flex-direction: column;
   gap: 0.25rem;
   flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-group-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-sidebar);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  opacity: 0.9;
+  text-align: left;
+  width: 100%;
+}
+
+.sidebar-group-title:hover {
+  background: var(--color-sidebar-hover);
+  opacity: 1;
+}
+
+.sidebar-group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding-left: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .sidebar-link {
