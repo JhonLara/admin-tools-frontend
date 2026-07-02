@@ -83,7 +83,7 @@ export default function DonutChart({ data, totalValue }: DonutChartProps) {
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", gap: "2rem", marginTop: "1rem" }}>
+      <div className="donut-legend">
         {data.map((d) => (
           <div key={d.name} style={{ textAlign: "left" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>

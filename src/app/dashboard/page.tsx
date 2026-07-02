@@ -194,16 +194,16 @@ export default function CarteraPage() {
     <div>
       <CarteraHeader onFiltersChange={setFilters} />
 
-      <div style={{ padding: "1.5rem 2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+      <div className="cartera-page">
         {loading && <p style={{ padding: "1rem", color: "var(--color-text-secondary)" }}>Cargando datos...</p>}
         {error && <p style={{ padding: "1rem", color: "var(--color-danger)" }}>Error: {error}</p>}
 
         {/* Top row: Donut + Recaudo */}
-        <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
-          <div style={{ flex: 1, minWidth: 0, background: "var(--color-surface)", border: "1px solid var(--color-border)", borderRadius: 16, padding: "1.5rem 2rem", boxShadow: "var(--shadow-soft)" }}>
+        <div className="cartera-row">
+          <div className="cartera-col">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
               <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--color-text-main)" }}>Resumen de cartera</h3>
-              <div style={{ display: "flex", background: "var(--color-bg)", borderRadius: 8, padding: 3, gap: 3 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", background: "var(--color-bg)", borderRadius: 8, padding: 3, gap: 3 }}>
                 <button
                   style={{
                     padding: "0.375rem 0.875rem", border: "none", borderRadius: 6, fontSize: "0.75rem",
@@ -239,7 +239,7 @@ export default function CarteraPage() {
             )}
           </div>
 
-          <div style={{ flex: 1, minWidth: 0, background: "var(--color-surface)", border: "1px solid var(--color-border)", borderRadius: 16, padding: "1.5rem 2rem", boxShadow: "var(--shadow-soft)" }}>
+          <div className="cartera-col">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
               <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--color-text-main)" }}>Recaudo</h3>
             </div>
@@ -250,8 +250,8 @@ export default function CarteraPage() {
               </p>
               <p style={{ fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>COP</p>
             </div>
-            <div style={{ overflowY: "auto", maxHeight: 280 }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem" }}>
+            <div style={{ overflow: "auto", maxHeight: 280 }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem", minWidth: 280 }}>
                 <thead>
                   <tr style={{ borderBottom: "1px solid var(--color-border)", textAlign: "left" }}>
                     <th style={{ padding: "8px 4px", color: "var(--color-text-secondary)", fontWeight: 600 }}>Tipo</th>
@@ -274,10 +274,10 @@ export default function CarteraPage() {
         </div>
 
         {/* Line chart row */}
-        <div style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", borderRadius: 16, padding: "1.5rem 2rem", boxShadow: "var(--shadow-soft)" }}>
+        <div className="cartera-col">
           <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--color-text-main)", marginBottom: "1rem" }}>Recaudo últimos 4 meses</h3>
-          <div style={{ display: "flex", gap: "2rem", alignItems: "flex-start" }}>
-            <div style={{ minWidth: 160, paddingTop: "2rem" }}>
+          <div className="cartera-line-row">
+            <div className="cartera-line-sidebar">
               <p style={{ fontSize: "0.75rem", color: "var(--color-text-secondary)", marginBottom: "0.25rem" }}>Total 4 meses</p>
               <p style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--color-text-main)" }}>$6.890.760.000</p>
               <p style={{ fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>COP</p>

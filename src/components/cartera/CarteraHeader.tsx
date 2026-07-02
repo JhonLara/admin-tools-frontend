@@ -117,15 +117,11 @@ export default function CarteraHeader({ onFiltersChange }: CarteraHeaderProps) {
   }, [date, month, year, sex, creditType, city]);
 
   return (
-    <div style={{
-      display: "flex", alignItems: "center", justifyContent: "space-between",
-      padding: "1rem 2rem", background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)",
-      gap: "1rem", flexWrap: "wrap",
-    }}>
-      <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--color-text-main)", whiteSpace: "nowrap" }}>
+    <div className="cartera-header">
+      <h1 className="cartera-header-title">
         Cartera
       </h1>
-      <div style={{ display: "flex", alignItems: "flex-end", gap: "0.75rem", flexWrap: "wrap" }}>
+      <div className="cartera-header-filters">
         <MultiSelect label="Mes" options={monthOptions} value={month} onChange={setMonth} />
         <MultiSelect label="Año" options={yearOptions} value={year} onChange={setYear} />
         <MultiSelect label="Sexo" options={sexOptions} value={sex} onChange={setSex} />

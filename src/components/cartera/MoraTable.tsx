@@ -37,13 +37,7 @@ export default function MoraTable({ data }: MoraTableProps) {
   };
 
   return (
-    <div style={{
-      background: "var(--color-surface)",
-      border: "1px solid var(--color-border)",
-      borderRadius: 16,
-      padding: "1.5rem 2rem",
-      boxShadow: "var(--shadow-soft)",
-    }}>
+    <div className="mora-table-wrap">
       <h2 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--color-text-main)", marginBottom: "1.25rem" }}>
         Cartera en mora por edades
       </h2>

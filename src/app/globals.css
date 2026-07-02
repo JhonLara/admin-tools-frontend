@@ -792,6 +792,136 @@ html, body {
   animation: spin 1s linear infinite;
 }
 
+/* Cartera Dashboard Layout */
+.cartera-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cartera-header-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  white-space: nowrap;
+}
+
+.cartera-header-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.cartera-page {
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cartera-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.cartera-col {
+  flex: 1;
+  min-width: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.cartera-line-row {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.cartera-line-sidebar {
+  min-width: 160px;
+  padding-top: 2rem;
+}
+
+.donut-legend {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.mora-table-wrap {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow-soft);
+}
+
+@media (max-width: 640px) {
+  .cartera-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.75rem 1rem;
+  }
+
+  .cartera-header-title {
+    font-size: 1.25rem;
+  }
+
+  .cartera-header-filters {
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cartera-page {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+
+  .cartera-row {
+    gap: 1rem;
+  }
+
+  .cartera-col {
+    flex: 1 1 100%;
+    min-width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .cartera-line-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cartera-line-sidebar {
+    min-width: 100%;
+    padding-top: 0;
+  }
+
+  .donut-legend {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .mora-table-wrap {
+    padding: 1rem;
+  }
+}
+
 /* Horarios Analistas Layout */
 .horarios-layout {
   display: grid;
