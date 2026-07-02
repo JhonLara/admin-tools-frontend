@@ -590,11 +590,12 @@ html, body {
   }
 }
 
-@media (max-width: 640px) {
-  .grid-4 {
-    grid-template-columns: 1fr;
-  }
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
 
+/* Tablets y móviles: colapsar sidebar */
+@media (max-width: 1024px) {
   .sidebar {
     display: flex;
     position: fixed;
@@ -631,6 +632,24 @@ html, body {
 
   .main-content {
     margin-left: 0;
+  }
+
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Solo escritorio ancho: sidebar fijo */
+@media (min-width: 1025px) {
+  .sidebar-mobile-toggle {
+    display: none;
+  }
+}
+
+/* Móviles: ajustes extra de compactación */
+@media (max-width: 640px) {
+  .grid-4 {
+    grid-template-columns: 1fr;
   }
 
   .page-container {
@@ -695,18 +714,6 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-}
-
-@media (max-width: 640px) {
-  .dashboard-charts {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (min-width: 641px) {
-  .sidebar-mobile-toggle {
-    display: none;
-  }
 }
 
 .chart-card {
