@@ -157,9 +157,9 @@ export default function VendedoresPage() {
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       <h1 style={{ fontSize: "1.25rem", fontWeight: 700 }}>Vendedores</h1>
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1.5rem", alignItems: "flex-start" }}>
+      <div className="vendedores-layout">
         {/* Formulario — izquierda en escritorio */}
-        <div style={{ flex: "0 0 320px", minWidth: 280 }}>
+        <div className="vendedores-form">
           <Card>
             <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "1rem" }}>Nueva solicitud</h3>
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
@@ -224,7 +224,7 @@ export default function VendedoresPage() {
         </div>
 
         {/* Tabla — derecha en escritorio, todo el ancho */}
-        <div style={{ flex: "1 1 500px", minWidth: 280 }}>
+        <div className="vendedores-table">
           <Card>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1rem" }}>
               <h3 style={{ fontSize: "1rem", fontWeight: 700 }}>Mis solicitudes</h3>

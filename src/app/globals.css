@@ -1139,3 +1139,54 @@ html, body {
     width: auto;
   }
 }
+
+/* Vendedores Layout */
+.vendedores-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.vendedores-form {
+  flex: 0 0 320px;
+  min-width: 280px;
+}
+
+.vendedores-table {
+  flex: 1 1 500px;
+  min-width: 280px;
+}
+
+/* Responsive general para móvil */
+@media (max-width: 640px) {
+  .vendedores-form {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .vendedores-table {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  /* Page headers: permitir wrap */
+  .flex.justify-between.items-center {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Botones de acción en tablas: wrap y más pequeños */
+  .table td .flex,
+  .table td [style*="display: flex"] {
+    flex-wrap: wrap !important;
+    gap: 0.25rem !important;
+  }
+
+  .table td button,
+  .table td .btn {
+    padding: 0.3rem 0.5rem !important;
+    font-size: 0.7rem !important;
+    min-height: auto !important;
+  }
+}
