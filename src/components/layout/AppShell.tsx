@@ -9,8 +9,8 @@ import Topbar from "./Topbar";
 const ROLE_ROUTES: Record<Rol, string[]> = {
   VENDEDOR: ["/vendedores"],
   ANALISTA: ["/analistas"],
-  ADMINISTRADOR: ["/resumen", "/empresas", "/aliados", "/administracion-analistas", "/horarios-analistas", "/historial", "/dashboard"],
-  SUPER_ADMIN: ["/resumen", "/dashboard", "/vendedores", "/analistas", "/empresas", "/aliados", "/administracion-analistas", "/horarios-analistas", "/grupos-telegram", "/usuarios", "/monitoreo", "/historial"],
+  ADMINISTRADOR: ["/resumen", "/empresas", "/aliados", "/administracion-analistas", "/horarios-analistas", "/historial", "/dashboard", "/backup"],
+  SUPER_ADMIN: ["/resumen", "/dashboard", "/vendedores", "/analistas", "/empresas", "/aliados", "/administracion-analistas", "/horarios-analistas", "/grupos-telegram", "/usuarios", "/monitoreo", "/historial", "/backup"],
 };
 
 function getHomeRoute(rol: Rol): string {

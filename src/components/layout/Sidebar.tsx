@@ -43,7 +43,7 @@ const menuGroups: MenuGroup[] = [
       { href: "/grupos-telegram", label: "Grupos de Telegram", roles: ["SUPER_ADMIN"] },
       { href: "/usuarios", label: "Usuarios", roles: ["SUPER_ADMIN"] },
       { href: "/monitoreo", label: "Monitoreo", roles: ["SUPER_ADMIN"] },
-      { href: "/backup", label: "Backup", roles: ["SUPER_ADMIN"] },
+      { href: "/backup", label: "Backup", roles: ["ADMINISTRADOR", "SUPER_ADMIN"] },
     ],
   },
 ];
